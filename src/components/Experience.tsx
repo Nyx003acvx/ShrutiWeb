@@ -1,21 +1,25 @@
-import { useState } from 'react'
-import { experience } from '../data/experience'
-import { Arrow } from './Arrow'
-import { useInView } from '../hooks/useInView'
+const publications = [
+  { title: 'Publication title one', date: '2026', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. A concise overview of the paper, its central question, and the contribution it makes.', href: '#' },
+  { title: 'Publication title two', date: '2025', description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. A short summary of the research approach, key themes, and findings.', href: '#' },
+  { title: 'Publication title three', date: '2024', description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', href: '#' },
+]
 
 export function Experience() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const { ref, isVisible } = useInView<HTMLElement>()
-  return <section ref={ref} id="experience" className={`experience experience-editorial section-pad${isVisible ? ' is-visible' : ''}`} aria-labelledby="experience-title">
-    <div className="experience-intro"><span className="eyebrow">(05) Experience</span><div><h2 id="experience-title">Places, people and<br /><em>problems</em> I’ve worked with.</h2></div></div>
-    <div className="experience-list">{experience.map((item, index) => {
-      const isOpen = openIndex === index
-      const detailId = `experience-detail-${index}`
-      return <article className={`experience-entry${isOpen ? ' is-open' : ''}`} key={item.duration}>
-        <time>{item.duration}</time><span className="experience-node" aria-hidden="true" />
-        <div className="experience-summary"><div className="experience-meta"><span>{item.location}</span><span>0{index + 1}</span></div><h3>{item.company}</h3><h4>{item.position}</h4><p>{item.description}</p><button type="button" aria-expanded={isOpen} aria-controls={detailId} onClick={() => setOpenIndex(isOpen ? null : index)}>More about the work <Arrow /></button></div>
-        <div id={detailId} className="experience-details" aria-hidden={!isOpen}><div><span className="eyebrow">Responsibilities</span><ul>{item.responsibilities.map((detail) => <li key={detail}>{detail}</li>)}</ul></div><div><span className="eyebrow">Achievements</span>{item.achievements.length ? <ul>{item.achievements.map((detail) => <li key={detail}>{detail}</li>)}</ul> : <p>Achievement details can be added here.</p>}</div><div className="experience-skills"><span className="eyebrow">Skills used</span><div>{item.skills.map((skill) => <span key={skill}>{skill}</span>)}</div></div></div>
-      </article>
-    })}</div>
+  return <section id="experience" className="experience experience-editorial section-pad publications-section" aria-labelledby="experience-title">
+    <div className="experience-intro">
+      <span className="eyebrow">(05) Research & Publications</span>
+      <div><h2 id="experience-title">Ideas put<br /><em>into words.</em></h2><p className="publications-intro-copy">Selected writing, research, and work in progress.</p></div>
+    </div>
+    <div className="publications-table-wrap">
+      <table className="publications-table">
+        <thead><tr><th scope="col">Title</th><th scope="col">Description</th><th scope="col">Publication date</th><th scope="col">Paper</th></tr></thead>
+        <tbody>{publications.map((item, index) => <tr key={item.title}>
+          <th scope="row"><span className="publication-index">0{index + 1}</span>{item.title}</th>
+          <td>{item.description}</td>
+          <td><time>{item.date}</time></td>
+          <td><a href={item.href} aria-label={`Read ${item.title}`}>Read paper ↗</a></td>
+        </tr>)}</tbody>
+      </table>
+    </div>
   </section>
 }
